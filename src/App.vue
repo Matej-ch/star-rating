@@ -1,17 +1,24 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <StarRating  :rating=4 :maxstars=5 :step=0.5 update-msg="Rating Updated" />
+
+    <StarRating  :rating=0 :maxstars=5 :step=0.5 />
+
+    <StarRating  :rating=5 :maxstars=5 :step=0.5 />
+
+    <StarRating  :rating=2.5 :maxstars=5 :step=0.5 />
+
+    <StarRating  :rating=7 :maxstars=10 :step=1 update-msg="Rating destroyed"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import StarRating from './components/StarRating.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    StarRating
   }
 }
 </script>

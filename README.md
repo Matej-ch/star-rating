@@ -1,24 +1,19 @@
 # star-rating
 
-## Project setup
-```
-npm install
+This is simple star rating component
+
+Requires icon of start, here using Fontawesome
+
+**Usage**
+
+```html
+<StarRating  :rating=7 :maxstars=10 :step=1 update-msg="Rating destroyed"/>
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+`rating` current rating
 
-### Compiles and minifies for production
-```
-npm run build
-```
+`maxstars` number of stars in rating
 
-### Lints and fixes files
-```
-npm run lint
-```
+`step` what is the step, that user can use for rating
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+`update-msg` message on rating update
