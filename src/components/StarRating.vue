@@ -1,6 +1,6 @@
 <template>
     <div class="rating-container">
-        <div class="list">
+        <div class="list" @mouseover="mouseOver" @mouseleave="mouseLeave">
             <span class="empty-stars">
                 <span @click="rate(star)" v-for="star in maxstars" class="star" :key="star.stars">
                     <i class="far fa-star"></i>
@@ -13,6 +13,7 @@
                 </span>
             </span>
         </div>
+        <input type="hidden" :value="stars" ref="ratingInput">
 
         <transition name="fade" v-if="msg">
             <div style="position:absolute;top:0;" class="alert-info">
@@ -38,7 +39,11 @@ export default {
             timePassed: 0,
             timerInterval: null,
             msg: '',
+            width: 0
         }
+    },
+    mounted() {
+        this.width = this.widthFromRating(this.stars);
     },
     methods: {
         rate(star) {
@@ -46,6 +51,7 @@ export default {
                 this.stars = this.stars === star ? star - 1 : star;
                 this.msg = this.updateMsg;
             }
+            this.width = this.widthFromRating(this.stars);
             this.startTimer();
         },
         onTimesUp() {
@@ -55,21 +61,28 @@ export default {
 
         startTimer() {
             this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
-        }
-    },
-    computed: {
-        width: function () {
-            let width = this.stars * 100 / this.maxstars;
+        },
 
-            if (!this.stars || this.stars === 0 || this.stars <= 0 || 0 === this.maxstars) {
+        widthFromRating: function(rating) {
+            let width = rating * 100 / this.maxstars;
+
+            if (!rating || rating === 0 || rating <= 0 || 0 === this.maxstars) {
                 return 0;
             }
 
-            if(this.stars > this.maxstars) { return 100; }
+            if(rating > this.maxstars) { return 100; }
 
             return width;
         },
-        timeLeft() {
+        mouseOver: function() {
+           this.width = 100;//this.widthFromRating(this.$refs.ratingInput.value);
+        },
+        mouseLeave: function () {
+            this.width = this.widthFromRating(this.$refs.ratingInput.value);
+        }
+    },
+    computed: {
+        timeLeft: function() {
             return 5 - this.timePassed;
         },
     },
