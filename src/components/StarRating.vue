@@ -1,14 +1,14 @@
 <template>
     <div class="rating-container">
-        <div class="list" @mouseover="mouseOver" @mouseleave="mouseLeave">
-            <span class="empty-stars">
-                <span @click="rate(star)" v-for="star in maxstars" class="star" :key="star.stars">
+        <div class="list" @mouseleave="mouseLeave">
+            <span class="empty-stars" ref="emptyStars">
+                <span @click="rate(star)" v-for="(star,i) in maxStars" class="star" :key="i" @mouseover="mouseOver(star)">
                     <i class="far fa-star"></i>
                 </span>
             </span>
 
-            <span class="fill-stars" :style="{width: width +'%' }">
-                <span @click="rate(star)" v-for="star in maxstars" class="star" :key="star.stars">
+            <span class="fill-stars" :style="{width: width +'%' }" ref="fillStars">
+                <span @click="rate(star)" v-for="(star,i) in maxStars" class="star" :key="i" @mouseover="mouseOver(star)">
                     <i class="fas fa-star"></i>
                 </span>
             </span>
@@ -29,7 +29,7 @@ export default {
     name: 'StarRating',
     props: {
         rating: { type: Number, default: 0 },
-        maxstars: {type: Number, default: 5 },
+        maxStars: {type: Number, default: 5 },
         step: {type: Number, default: 0.5 },
         updateMsg: { type:String }
     },
@@ -47,7 +47,7 @@ export default {
     },
     methods: {
         rate(star) {
-            if (typeof star === 'number' && star <= this.maxstars && star >= 0) {
+            if (typeof star === 'number' && star <= this.maxStars && star >= 0) {
                 this.stars = this.stars === star ? star - 1 : star;
                 this.msg = this.updateMsg;
             }
@@ -64,21 +64,30 @@ export default {
         },
 
         widthFromRating: function(rating) {
-            let width = rating * 100 / this.maxstars;
+            let width = rating * 100 / this.maxStars;
 
-            if (!rating || rating === 0 || rating <= 0 || 0 === this.maxstars) {
+            if (!rating || rating === 0 || rating <= 0 || 0 === this.maxStars) {
                 return 0;
             }
 
-            if(rating > this.maxstars) { return 100; }
+            if(rating > this.maxStars) { return 100; }
 
             return width;
         },
-        mouseOver: function() {
-           this.width = 100;//this.widthFromRating(this.$refs.ratingInput.value);
-        },
         mouseLeave: function () {
             this.width = this.widthFromRating(this.$refs.ratingInput.value);
+        },
+        mouseOver: function (star) {
+            let maxWidth = this.$refs.emptyStars.offsetWidth;
+            let unitWidth = maxWidth / this.maxStars;
+            let hoverWidth =  unitWidth * star;
+            if(hoverWidth >=maxWidth) {
+                this.width = 100;
+            }
+
+            console.log(hoverWidth);
+
+            this.width = hoverWidth / 2;
         }
     },
     computed: {
@@ -130,10 +139,4 @@ export default {
         text-shadow: 1px 1px #999;
         transition: width .2s ease-in-out;
     }
-
-
-    .empty-stars .star:hover {
-        color: #fde16d;
-    }
-
 </style>
