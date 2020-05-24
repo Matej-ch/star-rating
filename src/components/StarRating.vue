@@ -78,16 +78,13 @@ export default {
             this.width = this.widthFromRating(this.$refs.ratingInput.value);
         },
         mouseOver: function (star) {
-            let maxWidth = this.$refs.emptyStars.offsetWidth;
-            let unitWidth = maxWidth / this.maxStars;
+            let unitWidth = 100 / this.maxStars;
             let hoverWidth =  unitWidth * star;
-            if(hoverWidth >=maxWidth) {
+            if(hoverWidth >= 100) {
                 this.width = 100;
             }
 
-            console.log(hoverWidth);
-
-            this.width = hoverWidth / 2;
+            this.width = hoverWidth;
         }
     },
     computed: {
