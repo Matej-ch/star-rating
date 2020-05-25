@@ -17,3 +17,5 @@ Requires icon of start, here using Fontawesome
 `step` what is the step, that user can use for rating
 
 `update-msg` message on rating update
+
+![different types of star rating](rating.jpg)
