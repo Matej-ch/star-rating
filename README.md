@@ -1,8 +1,8 @@
-# star-rating
+# Star rating
 
 This is simple star rating component
 
-Requires icon of start, here using Fontawesome
+Requires icon of star, here using Fontawesome
 
 **Usage**
 
