@@ -1,13 +1,13 @@
 <template>
     <div class="rating-container">
         <div class="list" @mouseleave="mouseLeave">
-            <span class="empty-stars" ref="emptyStars">
+            <span class="empty-stars">
                 <span @click="rate(star)" v-for="(star,i) in maxStars" class="star" :key="i" @mouseover="mouseOver(star)">
                     <i class="far fa-star"></i>
                 </span>
             </span>
 
-            <span class="fill-stars" :style="{width: width +'%' }" ref="fillStars">
+            <span class="fill-stars" :style="{width: width +'%' }">
                 <span @click="rate(star)" v-for="(star,i) in maxStars" class="star" :key="i" @mouseover="mouseOver(star)">
                     <i class="fas fa-star"></i>
                 </span>
