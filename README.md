@@ -1,5 +1,7 @@
 # Star rating
 
+Requires vue.js 3 , go to branch v2 for previous version
+
 This is simple star rating component
 
 Requires icon of star, here using Fontawesome

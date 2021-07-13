@@ -7,17 +7,17 @@
                 </span>
             </span>
 
-            <span class="fill-stars" :style="{width: width +'%' }">
+            <span class="fill-stars" :style="{width: state.width +'%' }">
                 <span @click="rate(star)" v-for="(star,i) in maxStars" class="star" :key="i" @mouseover="mouseOver(star)">
                     <i class="fas fa-star"></i>
                 </span>
             </span>
         </div>
-        <input type="hidden" :value="stars" ref="ratingInput">
+        <input type="hidden" :value="state.stars" ref="ratingInput">
 
-        <transition name="fade" v-if="msg">
+        <transition name="fade" v-if="state.msg">
             <div style="position:absolute;top:0;" class="alert-info">
-                {{ msg }}
+                {{ state.msg }}
             </div>
         </transition>
 
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import {reactive, computed, watch,ref,onMounted} from 'vue';
+
 export default {
     name: 'StarRating',
     props: {
@@ -33,71 +35,74 @@ export default {
         step: {type: Number, default: 0.5 },
         updateMsg: { type:String }
     },
-    data() {
-        return {
-            stars: this.rating,
+    setup(props) {
+        const state = reactive({
+            stars: props.rating,
             timePassed: 0,
             timerInterval: null,
             msg: '',
             width: 0
-        }
-    },
-    mounted() {
-        this.width = this.widthFromRating(this.stars);
-    },
-    methods: {
-        rate(star) {
-            if (typeof star === 'number' && star <= this.maxStars && star >= 0) {
-                this.stars = this.stars === star ? star - 1 : star;
-                this.msg = this.updateMsg;
-            }
-            this.width = this.widthFromRating(this.stars);
-            this.startTimer();
-        },
-        onTimesUp() {
-            clearInterval(this.timerInterval);
-            this.msg = '';
-        },
+        });
 
-        startTimer() {
-            this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
-        },
+        const ratingInput = ref(null);
 
-        widthFromRating: function(rating) {
-            let width = rating * 100 / this.maxStars;
+        onMounted(() => {
+            state.width = widthFromRating(state.stars);
+        })
 
-            if (!rating || rating === 0 || rating <= 0 || 0 === this.maxStars) {
+        function widthFromRating(rating) {
+            let width = rating * 100 / props.maxStars;
+
+            if (!rating || rating === 0 || rating <= 0 || 0 === props.maxStars) {
                 return 0;
             }
 
-            if(rating > this.maxStars) { return 100; }
+            if(rating > props.maxStars) { return 100; }
 
             return width;
-        },
-        mouseLeave: function () {
-            this.width = this.widthFromRating(this.$refs.ratingInput.value);
-        },
-        mouseOver: function (star) {
-            let unitWidth = 100 / this.maxStars;
+        }
+
+        function rate(star) {
+            if (typeof star === 'number' && star <= props.maxStars && star >= 0) {
+                state.stars = state.stars === star ? star - 1 : star;
+                state.msg = props.updateMsg;
+            }
+            state.width = widthFromRating(state.stars);
+            startTimer();
+        }
+
+        function startTimer() {
+            state.timerInterval = setInterval(() => (state.timePassed += 1), 1000);
+        }
+
+        function mouseLeave() {
+            state.width = widthFromRating(ratingInput.value.value);
+        }
+
+        function onTimesUp() {
+            clearInterval(state.timerInterval);
+            state.msg = '';
+        }
+
+        function mouseOver(star) {
+            let unitWidth = 100 / props.maxStars;
             let hoverWidth =  unitWidth * star;
             if(hoverWidth >= 100) {
-                this.width = 100;
+                state.width = 100;
             }
 
-            this.width = hoverWidth;
+            state.width = hoverWidth;
         }
-    },
-    computed: {
-        timeLeft: function() {
-            return 5 - this.timePassed;
-        },
-    },
-    watch: {
-        timeLeft(newValue) {
+
+        const timeLeft = computed(() =>  5 - state.timePassed)
+
+        watch(() => timeLeft, (newValue) => {
             if (newValue === 0) {
-                this.onTimesUp();
+                onTimesUp();
             }
-        }
+        })
+
+        return { state,rate,mouseLeave,mouseOver,ratingInput,timeLeft };
     },
 }
 </script>
