@@ -1,26 +1,42 @@
 <template>
   <div id="app">
-    <StarRating  :rating=4 :max-stars=5 :step=0.5 update-msg="Rating Updated" />
+    <StarRating
+      :rating="4"
+      :max-stars="5"
+      :step="0.5"
+      update-msg="Rating Updated"
+    />
 
-    <StarRating  :rating=0 :max-stars=5 :step=0.5 />
+    <StarRating
+      :rating="0"
+      :max-stars="5"
+      :step="0.5"
+    />
 
-    <StarRating  :rating=5 :max-stars=5 :step=0.5 />
+    <StarRating
+      :rating="5"
+      :max-stars="5"
+      :step="0.5"
+    />
 
-    <StarRating  :rating=2.5 :max-stars=5 :step=0.5 />
+    <StarRating
+      :rating="2.5"
+      :max-stars="5"
+      :step="0.5"
+    />
 
-    <StarRating  :rating=7 :max-stars=10 :step=1 update-msg="Rating destroyed"/>
+    <StarRating
+      :rating="7"
+      :max-stars="10"
+      :step="1"
+      update-msg="Rating destroyed"
+    />
   </div>
 </template>
 
-<script>
+<script setup>
 import StarRating from './components/StarRating.vue'
 
-export default {
-  name: 'App',
-  components: {
-    StarRating
-  }
-}
 </script>
 
 <style>
