@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import {reactive, computed, watch,ref,onMounted} from 'vue';
+import {reactive,ref,onMounted} from 'vue';
 
 const emit = defineEmits(['posted'])
 
