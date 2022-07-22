@@ -1,4 +1,8 @@
-# Star rating
+# Deprecated
+
+## component was moved to repository [here](https://github.com/Matej-ch/editable-form-elements)
+
+### Star rating
 
 Requires vue.js 3 , go to branch v2 for previous version
 
