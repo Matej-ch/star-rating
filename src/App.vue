@@ -4,7 +4,6 @@
       :rating="4"
       :max-stars="5"
       :step="0.5"
-      update-msg="Rating Updated"
     />
 
     <StarRating
@@ -29,7 +28,6 @@
       :rating="7"
       :max-stars="10"
       :step="1"
-      update-msg="Rating destroyed"
     />
   </div>
 </template>
