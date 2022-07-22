@@ -2,24 +2,21 @@
   <div class="rating-container">
     <div
       class="list"
-      @mouseleave="mouseLeave"
-    >
+      @mouseleave="mouseLeave">
       <span class="empty-stars">
         <span
           v-for="(star,i) in maxStars"
           :key="i"
           class="star"
           @click="rate(star)"
-          @mouseover="mouseOver(star)"
-        >
+          @mouseover="mouseOver(star)" >
           <i class="far fa-star" />
         </span>
       </span>
 
       <span
         class="fill-stars"
-        :style="{width: state.width +'%' }"
-      >
+        :style="{width: state.width +'%' }" >
         <span
           v-for="(star,i) in maxStars"
           :key="i"
@@ -36,38 +33,23 @@
       type="hidden"
       :value="state.stars"
     >
-
-    <transition
-      v-if="state.msg"
-      name="fade"
-    >
-      <div
-        style="position:absolute;top:0;"
-        class="alert-info"
-      >
-        {{ state.msg }}
-      </div>
-    </transition>
   </div>
 </template>
 
 <script setup>
 import {reactive, computed, watch,ref,onMounted} from 'vue';
 
-const emit = defineEmits(['updated'])
+const emit = defineEmits(['posted'])
 
 const props = defineProps({
     rating: { type: Number, default: 0 },
     maxStars: {type: Number, default: 5 },
     step: {type: Number, default: 0.5 },
-    updateMsg: { type:String,default:'' }
 });
 
 const state = reactive({
     stars: props.rating,
     timePassed: 0,
-    timerInterval: null,
-    msg: '',
     width: 0
 });
 
@@ -92,25 +74,14 @@ function widthFromRating(rating) {
 function rate(star) {
     if (typeof star === 'number' && star <= props.maxStars && star >= 0) {
         state.stars = state.stars === star ? star - 1 : star;
-        state.msg = props.updateMsg;
     }
     state.width = widthFromRating(state.stars);
-    emit('updated',star)
-    startTimer();
-}
+    emit('posted',star)
 
-function startTimer() {
-    state.timerInterval = setInterval(() => (state.timePassed += 1), 1000);
 }
-
 
 function mouseLeave() {
     state.width = widthFromRating(ratingInput.value.value);
-}
-
-function onTimesUp() {
-    clearInterval(state.timerInterval);
-    state.msg = '';
 }
 
 function mouseOver(star) {
@@ -122,14 +93,6 @@ function mouseOver(star) {
 
     state.width = hoverWidth;
 }
-
-const timeLeft = computed(() =>  5 - state.timePassed)
-
-watch(() => timeLeft, (newValue) => {
-    if (newValue === 0) {
-        onTimesUp();
-    }
-})
 
 </script>
 
